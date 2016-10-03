@@ -1,0 +1,108 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  border-radius: 2.5px;
+  font-size: 30px;
+}
+
+body {
+  display: initial;
+  margin: 0;
+  background: lightblue;
+}
+
+.animal-list{
+  height: 200px;
+  width: 565px;
+  font-size: 40px;
+  position: fixed;
+  background: lightgrey;
+  border: thin solid gray;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  visibility: hidden;
+}
+
+.zoo-header{
+  width: 46vw;
+  margin: 10px 27vw;
+  text-align: center;
+  background: black;
+  border: thin white solid;
+  color: white;
+}
+
+.zoo {
+  background: lightgreen;
+  border: thin solid brown;
+  text-align: center;
+  width: 46vw;
+  margin: 20px 27vw;
+  font-size: 50px;
+  .pen {
+    background: green;
+    border: 2px dashed black;
+    border-radius: 0px;
+    width: 20%;
+    margin: 10px 0;
+    display: inline-block;
+    text-align: justify;
+    padding: 2px;
+    .animal {
+      padding: 0 2px;
+    }
+  }
+}
+
+.menu {
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #009688;
+  width: 25vw;
+  height: 100vh;
+  padding: 25vh 0;
+  color: white;
+  :focus {
+    outline: none;
+  }
+}
+
+button, input {
+  border: none;
+  margin: 20px 0;
+  color: white;
+  &:active {
+    background: white;
+    color: black
+  }
+}
+
+.animal-number {
+  margin: 20px 0;
+  input {
+    background: black;
+    border: thin solid white;
+    color: transparent;
+    text-shadow: 0 0 0 white;
+    text-align: center;
+  }
+  button {
+    width: 3em;
+  }
+}
+
+.stats {
+  right: 0;
+  left: auto;
+  padding: 15vh 0;
+  .display {
+    background: black;
+    border: thin solid white;
+    margin: 0 10%;
+    width: 80%;
+    height: 70vh;
+  }
+}
