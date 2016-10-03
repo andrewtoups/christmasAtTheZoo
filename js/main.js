@@ -19,7 +19,7 @@ var Utils = {
 // Zoo Constructor Function
 ///////////////////
 function Zoo (){
-  this.menagerie = [];
+  this.menagerie = {};
   this.regions = {
     zoo: null,
     display: null,
@@ -32,9 +32,9 @@ Zoo.prototype = {
     for (var index = 0; index < numOfAnimals; index++){
       newAnimal = this.grabAnimal();
       if (newAnimal !== undefined) {
-        this.menagerie.push(newAnimal);
+        this.menagerie[newAnimal.name + index] = newAnimal;
       } else {
-        this.menagerie = [];
+        this.menagerie = {};
         return 'Something went horribly, horribly wrong!!';
       }
     }
@@ -58,6 +58,9 @@ Zoo.prototype = {
       default:
         return console.log("Unknown Species, cannot create");
     }
+  },
+  showMenagerie: function showMenagerie(){
+
   }
 };
 
@@ -230,8 +233,8 @@ GilaMonster.random = function random(){
   return randomGilaMonster;
 };
 GilaMonster.prototype = Object.create(Reptile.prototype, {
-  sunBathe: {
-    value: function sunBathe(duration) {
+  bask: {
+    value: function bask(duration) {
       return this.name + " basked in the hot desert sun for " + duration + " hours. That's chill.";
     }
   },
@@ -320,7 +323,7 @@ Horse.random = function random(){
 Horse.prototype = Object.create(Mammal.prototype, {
   gallop: {
     value: function gallop(distance) {
-      return this.name + " galloped for " + distance + " miles! Whoa, nelly!";
+      return this.name + " galloped for " + distance + " miles! Holy heck.";
     }
   },
   reproduce: {
