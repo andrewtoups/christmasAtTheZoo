@@ -45,12 +45,13 @@ body {
     border: 2px dashed black;
     border-radius: 0px;
     width: 20%;
-    margin: 10px 0;
+    margin: 10px ;
     display: inline-block;
     text-align: justify;
     padding: 2px;
     .animal {
       padding: 0 2px;
+      cursor: crosshair;
     }
   }
 }
@@ -89,9 +90,6 @@ button, input {
     text-shadow: 0 0 0 white;
     text-align: center;
   }
-  button {
-    width: 3em;
-  }
 }
 
 .stats {
@@ -104,5 +102,13 @@ button, input {
     margin: 0 10%;
     width: 80%;
     height: 70vh;
+    .stat-item {
+      font-size: 13px;
+      font-family: monospace;
+    }
+    button {
+      font-size: 15px;
+      margin: 0 5px;
+    }
   }
 }
