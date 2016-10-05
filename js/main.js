@@ -13,6 +13,14 @@ var Utils = {
     };
     return dateObject;
   },
+  parseStats: function parseStats(info){
+    var elems = [];
+    for (var keyword in info){
+      elem = $("<p class='stat-item'>" + keyword + ": " + info[keyword] + "</p>");
+      elems.push(elem);
+    }
+    return elems;
+  }
 };
 
 ///////////////////
@@ -46,6 +54,7 @@ Zoo.prototype = {
       newAnimal = this.grabAnimal();
       if (newAnimal !== undefined) {
         this.menagerie[newAnimal.getSpecies() + " " + index] = newAnimal;
+        newAnimal.name += " " + index;
       } else {
         this.menagerie = {};
         console.log('Something went horribly, horribly wrong!!');
@@ -79,36 +88,40 @@ Zoo.prototype = {
     }
     for (var specificPen in zoo.pens){ // draw pens on screen and fill with animal of that type
       $(zoo.elem).append(zoo.pens[specificPen]);
-      for (animal in this.menagerie) {
-        var specificAnimal = this.menagerie[animal];
+      var keys = Object.keys(this.menagerie);
+      keys.forEach((function(key) {
+        var specificAnimal = this.menagerie[key];
         var specificSpecies = specificAnimal.getSpecies(); // sort animals by type, append to pens
         if (specificSpecies === specificPen){
-          $(zoo.pens[specificPen]).append(this.menagerie[animal].elem); //put in pen
-          $(this.menagerie[animal].elem).click(specificAnimal, (function(){ // make them clickable for stats
+          $(zoo.pens[specificPen]).append(specificAnimal.elem); //put in pen
+          $(specificAnimal.elem).click(specificAnimal, (function(){ // make them clickable for stats
             this.showAnimalMenu(specificAnimal);
           }).bind(this));
         }
-      }
+      }).bind(this));
     }
     this.regions.zoo = zoo;
   },
   showAnimalMenu: function showAnimalMenu(animal){
-    $(this.regions.display.empty());
-    var stats = this.parseAnimalStats(animal.getInfo());
+    var display = $(this.regions.display).empty();
+    var stats = Utils.parseStats(animal.getInfo());
     for (var index = 0; index < stats.length; index++){
-      $(this.regions.display).append(stats[index]);
+      display.append(stats[index]);
     }
-    $(this.regions.display).append('<button class="pet">Pet!</button>');
-    $(this.regions.display).append('<button class="breed">Breed!</button');
+    var petButton = $('<button>').attr('class', 'pet').text('Pet!');
+    var breedButton = $('<button>').attr('class', 'breed').text('Breed!');
+    petButton.appendTo(display).click(animal, (function() {
+      var num = Math.ceil(Math.random() * 10);
+      var petAction = animal.petAction;
+      var msg = $('<p>').attr('class', 'stat-item').text(animal[petAction](num));
+      display.append(msg);
+    }).bind(this));
+    breedButton.appendTo(display).click(animal, (function(){
+      // animal.reproduce(); // TURNS OUT THIS IS REALLY HARD TO IMPLEMENT LOL
+      var msg = $('<p>').attr('class', 'stat-item').text("Knock it off, perv!");
+      display.append(msg);
+    }).bind(this));
   },
-  parseAnimalStats: function parseAnimalStats(info){
-    var elems = [];
-    for (var keyword in info){
-      elem = $("<p class='stat-item'>" + keyword + ": " + info[keyword] + "</p>");
-      elems.push(elem);
-    }
-    return elems;
-  }
 };
 
 ///////////////////
@@ -221,10 +234,13 @@ Reptile.prototype = Object.create(Animal.prototype, {
 // Species:
 ///////////////////
 
+//TODO: fix animal event listener setup!!!
+
 // Dog Constructor Function
 function Dog (name, bMonth, bDay, bYear) {
   Mammal.call(this, name, bMonth, bDay, bYear);
   this.elem = $("<span class='animal'>" + Dog.icon + "</span>");
+  this.petAction = 'fetch';
   console.log("I'm a dog and my name is " + name + "!");
 }
 Dog.lifeExpectancy = 13;
@@ -272,6 +288,7 @@ Dog.prototype = Object.create(Mammal.prototype, {
 function GilaMonster(name, bMonth, bDay, bYear){
   Reptile.call(this, name, bMonth, bDay, bYear);
   this.elem = $("<span class='animal'>" + GilaMonster.icon + "</span>");
+  this.petAction = 'bask';
   console.log("I'm a Gila Monster and my name is " + name + "!");
 }
 GilaMonster.lifeExpectancy = 30;
@@ -300,7 +317,7 @@ GilaMonster.prototype = Object.create(Reptile.prototype, {
       for (var index = 0; index < numberOfEggs; index++){
         eggs[index] = new GilaMonster(this.name + ' Jr.', undefined, undefined, undefined);
       }
-      console.log(this.name + " laid " + numberOfEggs + " eggs.");
+      eggs.message = this.name + " laid " + numberOfEggs + " eggs.";
       return eggs;
     }
   },
@@ -323,6 +340,7 @@ GilaMonster.prototype = Object.create(Reptile.prototype, {
 function Alligator(name, bMonth, bDay, bYear){
   Reptile.call(this, name, bMonth, bDay, bYear);
   this.elem = $("<span class='animal'>" + Alligator.icon + "</span>");
+  this.petAction = 'chomp';
   console.log("I'm an Alligator and my name is " + name + "!");
 }
 Alligator.lifeExpectancy = 50;
@@ -374,6 +392,7 @@ Alligator.prototype = Object.create(Reptile.prototype, {
 function Horse(name, bMonth, bDay, bYear){
   Mammal.call(this, name, bMonth, bDay, bYear);
   this.elem = $("<span class='animal'>" + Horse.icon + "</span>");
+  this.petAction = 'gallop';
   console.log("I'm a horse and my name is " + name + "!");
 }
 Horse.lifeExpectancy = 30;
